@@ -8,6 +8,14 @@ Created on Tue Nov  9 21:02:28 2021
 import networkx as nx
 import numpy as np
 
+"""
+This whole first section is for the creation of outerplanar graphs, that are
+the input fot the face-tree algorithm, when is done I'll probably put it all
+into a class.
+"""
+
+
+#-->Create a cycle graph
 def cycle_graph(num_vertx):
     vertx_list = list(range(1, num_vertx + 1))    
     G = nx.Graph()
@@ -16,6 +24,7 @@ def cycle_graph(num_vertx):
         G.add_edge(vertx_list[i], vertx_list[i+1])        
     return(G)
 
+#-->With dfs give the necesary data structrue and id of each node
 def dfs_iter_id(G, v):
   visited = [False] * nx.number_of_nodes(G) 
   stack = [v]
@@ -29,7 +38,8 @@ def dfs_iter_id(G, v):
       for w in list(G.adj[v]):
         if visited[w-1] == False:
           stack.append(w)
-          
+
+#--> Routine for knowing if an edge is already in a graph          
 def this_edge_exist(G, node_i, node_j, edge):
     edge = list(edge)
     edge.sort()
@@ -39,9 +49,12 @@ def this_edge_exist(G, node_i, node_j, edge):
     else:
         return False
     
+#--> This routine is for knowing if an edge cuts another
 def parenthesis_check():
     pass
-          
+
+
+#--> This routine recieves a graph as an input an add random edges to it          
 def rndm_edges(G, chance):
   for i in range(1, nx.number_of_nodes(G) + 1):
     for j in range(1, nx.number_of_nodes(G) + 1):
@@ -56,6 +69,10 @@ def rndm_edges(G, chance):
                 else:
                     G.nodes[i]['right'].append((j,i))
                     G.nodes[j]['left'].append((j,i))
+                    
+#--> This will create an outerplanar graph
+def outerplanar_create(G):
+    pass
             
 if __name__ == '__main__':
     Graph = cycle_graph(7)    

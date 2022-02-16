@@ -1,2 +1,2 @@
 # face_tree
-Code to create outerplanar graphs an then apply to it and algorythm called "face tree".
+Code to create random outerplanar graphs and then use them as an input to an algorythm called "face tree".

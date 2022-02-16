@@ -14,7 +14,6 @@ the input fot the face-tree algorithm, when is done I'll probably put it all
 into a class.
 """
 
-
 #-->Create a cycle graph
 def cycle_graph(num_vertx):
     vertx_list = list(range(1, num_vertx + 1))    
@@ -50,9 +49,17 @@ def this_edge_exist(G, node_i, node_j, edge):
         return False
     
 #--> This routine is for knowing if an edge cuts another
-def parenthesis_check():
-    pass
-
+#--> returns True if there is no conflict, returns False if there is
+def parenthesis_check(G, i, j):
+    new_edge = [i,j]
+    new_edge.sort()
+    new_edge = tuple(new_edge)
+    list_edges = list(nx.edges(G))
+    for i in range(len(list_edges)):
+        if new_edge[0] >= list_edges[i][0] and new_edge[1] <= list_edges[i][1]:
+            return True
+        else:
+            return False
 
 #--> This routine recieves a graph as an input an add random edges to it          
 def rndm_edges(G, chance):
@@ -60,15 +67,16 @@ def rndm_edges(G, chance):
     for j in range(1, nx.number_of_nodes(G) + 1):
       if i != j and j != i+1 and j != i-1 and not(i==1 and j==nx.number_of_nodes(G)) and not(i==nx.number_of_nodes(G) and j==1): #asegurar que sean una cuerda
         if this_edge_exist(G, i, j, (i, j)) == False:
-            rndm_num = np.random.random_sample()
-            if rndm_num < chance:
-                G.add_edge(i, j)
-                if i < j:
-                    G.nodes[i]['left'].append((i,j))
-                    G.nodes[j]['right'].append((i,j))
-                else:
-                    G.nodes[i]['right'].append((j,i))
-                    G.nodes[j]['left'].append((j,i))
+            if parenthesis_check(G, i, j) == True:
+                rndm_num = np.random.random_sample()
+                if rndm_num < chance:
+                    G.add_edge(i, j)
+                    if i < j:
+                        G.nodes[i]['left'].append((i,j))
+                        G.nodes[j]['right'].append((i,j))
+                    else:
+                        G.nodes[i]['right'].append((j,i))
+                        G.nodes[j]['left'].append((j,i))
                     
 #--> This will create an outerplanar graph
 def outerplanar_create(G):
